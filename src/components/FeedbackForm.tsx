@@ -22,14 +22,12 @@ const FeedbackForm = ({ onAnalyze }: FeedbackFormProps) => {
     try {
       onAnalyze(text);
       if (files.length > 0) {
-        toast({
-          title: "Files attached",
+        toast("Files attached", {
           description: `${files.length} file(s) will be processed with your feedback`,
         });
       }
     } catch (error) {
-      toast({
-        title: "Error",
+      toast("Error", {
         description: "Failed to analyze feedback. Please try again.",
         variant: "destructive",
       });
@@ -40,8 +38,7 @@ const FeedbackForm = ({ onAnalyze }: FeedbackFormProps) => {
 
   const handleFilesSelected = (selectedFiles: File[]) => {
     setFiles(selectedFiles);
-    toast({
-      title: "Files added",
+    toast("Files added", {
       description: `${selectedFiles.length} file(s) selected`,
     });
   };

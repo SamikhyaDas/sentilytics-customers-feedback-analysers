@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import FeedbackForm from '@/components/FeedbackForm';
 import SentimentDisplay from '@/components/SentimentDisplay';
@@ -19,7 +20,13 @@ const Index = () => {
     });
     
     setFeedback(text);
-    setSentiment(response.sentiment);
+    // Ensure the response.sentiment is a valid sentiment type
+    if (response.sentiment === 'positive' || response.sentiment === 'neutral' || response.sentiment === 'negative') {
+      setSentiment(response.sentiment);
+    } else {
+      // Default to neutral if the sentiment is not valid
+      setSentiment('neutral');
+    }
     setKeywords(response.keywords);
   };
 
