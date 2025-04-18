@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
 import FeedbackForm from '@/components/FeedbackForm';
 import SentimentDisplay from '@/components/SentimentDisplay';
 import KeywordCloud from '@/components/KeywordCloud';
 import { Card } from '@/components/ui/card';
+import DashboardLayout from '@/components/DashboardLayout';
 
 const Index = () => {
   const [feedback, setFeedback] = useState('');
@@ -46,30 +46,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
-          Customer Feedback Analyzer
-        </h1>
-        
-        <div className="space-y-6">
-          <Card className="p-6">
-            <FeedbackForm onAnalyze={analyzeFeedback} />
-          </Card>
+    <DashboardLayout>
+      <div className="space-y-6">
+        <Card className="p-6">
+          <FeedbackForm onAnalyze={analyzeFeedback} />
+        </Card>
 
-          {sentiment && (
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card className="p-6">
-                <SentimentDisplay sentiment={sentiment} />
-              </Card>
-              <Card className="p-6">
-                <KeywordCloud keywords={keywords} />
-              </Card>
-            </div>
-          )}
-        </div>
+        {sentiment && (
+          <div className="grid gap-6 md:grid-cols-2">
+            <Card className="p-6">
+              <SentimentDisplay sentiment={sentiment} />
+            </Card>
+            <Card className="p-6">
+              <KeywordCloud keywords={keywords} />
+            </Card>
+          </div>
+        )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
