@@ -4,52 +4,30 @@ import SentimentDisplay from '@/components/SentimentDisplay';
 import KeywordCloud from '@/components/KeywordCloud';
 import { Card } from '@/components/ui/card';
 import DashboardLayout from '@/components/DashboardLayout';
+import { analyzeFeedback } from '@/utils/api';
 
 const Index = () => {
   const [feedback, setFeedback] = useState('');
   const [sentiment, setSentiment] = useState<'positive' | 'neutral' | 'negative' | null>(null);
   const [keywords, setKeywords] = useState<Array<{ text: string; count: number }>>([]);
 
-  const analyzeFeedback = (text: string) => {
-    setFeedback(text);
-    
-    // Simple sentiment analysis based on keyword matching
-    const positiveWords = ['great', 'awesome', 'excellent', 'good', 'love', 'perfect', 'thanks'];
-    const negativeWords = ['bad', 'poor', 'terrible', 'awful', 'hate', 'worst', 'disappointed'];
-    
-    const words = text.toLowerCase().split(/\s+/);
-    const positiveCount = words.filter(word => positiveWords.includes(word)).length;
-    const negativeCount = words.filter(word => negativeWords.includes(word)).length;
-    
-    if (positiveCount > negativeCount) {
-      setSentiment('positive');
-    } else if (negativeCount > positiveCount) {
-      setSentiment('negative');
-    } else {
-      setSentiment('neutral');
-    }
-
-    // Extract keywords and their frequencies
-    const wordFrequency: Record<string, number> = {};
-    words.forEach(word => {
-      if (word.length > 3) { // Only count words longer than 3 characters
-        wordFrequency[word] = (wordFrequency[word] || 0) + 1;
-      }
+  const handleAnalyzeFeedback = async (text: string) => {
+    const response = await analyzeFeedback({
+      text,
+      files: [],
+      timestamp: new Date().toISOString()
     });
-
-    const keywordArray = Object.entries(wordFrequency)
-      .map(([text, count]) => ({ text, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 10); // Get top 10 keywords
-
-    setKeywords(keywordArray);
+    
+    setFeedback(text);
+    setSentiment(response.sentiment);
+    setKeywords(response.keywords);
   };
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <Card className="p-6">
-          <FeedbackForm onAnalyze={analyzeFeedback} />
+          <FeedbackForm onAnalyze={handleAnalyzeFeedback} />
         </Card>
 
         {sentiment && (
